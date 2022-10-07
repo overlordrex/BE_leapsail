@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 import authRoute from './routes/auth.js';
 
@@ -17,6 +18,8 @@ const connectDB = () => {
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
+
 app.use('/api/auth', authRoute);
 
 app.use((err, req, res, next) => {

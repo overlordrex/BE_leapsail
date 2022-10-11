@@ -66,7 +66,6 @@ export const verifyEmail = async (req, res, next) => {
       user.verified = true;
 
       await user.save();
-      res.redirect('https://leapsail-web.netlify.app/login');
     }
   } catch (error) {
     next(error);

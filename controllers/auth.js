@@ -47,7 +47,7 @@ export const register = async (req, res, next) => {
         // res.send(err);
         console.log(err);
       } else {
-        res.status(200).json({ message: 'CHECK EMAIL' });
+        res.status(200).json(info);
       }
     });
   } catch (error) {

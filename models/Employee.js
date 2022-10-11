@@ -6,10 +6,9 @@ const EmployeeSchema = new mongoose.Schema(
     lastname: { type: String },
     email: { type: String, unique: true },
     password: { type: String },
-    emailToken: { type: String },
-    verified: { type: Boolean, default: false },
+    isAdmin: { type: Boolean, default: false },
   },
   { timestamps: true }
 );
 
-export default mongoose.model('User', EmployeeSchema);
+export default mongoose.model('Employee', EmployeeSchema);

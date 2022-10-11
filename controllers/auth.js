@@ -40,7 +40,7 @@ export const register = async (req, res, next) => {
     };
 
     const savedUser = await user.save();
-    res.send(req.headers.host);
+    // res.send(req.headers.host);
 
     transporter.sendMail(mail, (err, info) => {
       if (err) {

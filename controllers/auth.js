@@ -36,7 +36,7 @@ export const register = async (req, res, next) => {
       subject: 'Leapsail Email verification',
       html: `<h2>${user.firstname}, Thanks for registering</h2>
       <h4>Please verify your email to continue</h4>
-      <a href="https://${req.headers.host}/user/verify-email?token=${user.emailToken}">${user.emailToken}</a>`,
+      <a href="https://${req.headers.host}/api/auth/verify-email?token=${user.emailToken}">${user.emailToken}</a>`,
     };
 
     const savedUser = await user.save();
@@ -50,6 +50,23 @@ export const register = async (req, res, next) => {
         res.status(200).json(info);
       }
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const verifyEmail = async (req, res, next) => {
+  try {
+    const token = req.query.token;
+    const user = await User.findOne({ emailToken: token });
+
+    if (user) {
+      user.emailToken = null;
+      user.verified = true;
+
+      await user.save();
+      res.redirect('https://leapsail-web.netlify.app/login');
+    }
   } catch (error) {
     next(error);
   }

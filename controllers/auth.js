@@ -18,38 +18,38 @@ const transporter = nodemailer.createTransport({
 });
 
 export const register = async (req, res, next) => {
-  const salt = bcrypt.genSaltSync(10);
-  const hash = bcrypt.hashSync(req.body.password, salt);
-
-  const user = new User({
-    firstname: req.body.firstName,
-    lastname: req.body.lastName,
-    email: req.body.email,
-    password: hash,
-    emailToken: crypto.randomBytes(64).toString('hex'),
-  });
-
   try {
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(req.body.password, salt);
+
+    const user = new User({
+      firstname: req.body.firstName,
+      lastname: req.body.lastName,
+      email: req.body.email,
+      password: hash,
+      emailToken: crypto.randomBytes(64).toString('hex'),
+    });
+
     const mail = {
-      from: 'atuzierex0@gmail.com',
+      from: ' "Verify your email" <atuzierex@gmail.com>',
       to: user.email,
       subject: 'Leapsail Email verification',
       html: `<h2>${user.firstname}, Thanks for registering</h2>
       <h4>Please verify your email to continue</h4>
-      <a href="https://leapsail-web.netlify.app/login">verify your email</a>`,
+      <a href="https://${req.headers.host}/user/verify-email?token=${user.emailToken}">${user.emailToken}</a>`,
     };
 
-    transporter.sendMail(mail, (err) => {
+    const savedUser = await user.save();
+
+    transporter.sendMail(mail, (err, info) => {
       if (err) {
         // next(handleError(404, 'Email does not exist.'));
         // res.send(err);
-        console.log('email invalid');
+        console.log(err);
       } else {
         res.status(200).json({ message: 'CHECK EMAIL' });
       }
     });
-
-    const savedUser = await user.save();
   } catch (error) {
     next(error);
   }

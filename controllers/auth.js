@@ -19,6 +19,9 @@ const transporter = nodemailer.createTransport({
 
 export const register = async (req, res, next) => {
   try {
+    const check = await User.findOne({ email: req.body.email });
+    if (check) return next(handleError(404, 'User already exist.'));
+
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(req.body.password, salt);
 

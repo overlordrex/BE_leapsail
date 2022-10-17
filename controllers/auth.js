@@ -80,6 +80,8 @@ export const login = async (req, res, next) => {
     if (user) {
       user.verified = true;
       user.emailToken = null;
+
+      await user.save();
     }
     if (!user) return next(handleError(404, 'User does not exist.'));
 

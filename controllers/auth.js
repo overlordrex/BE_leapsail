@@ -77,13 +77,22 @@ export const verifyEmail = async (req, res, next) => {
 export const login = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
-    if (user) {
+    // if (user) {
+    //   user.verified = true;
+    //   user.emailToken = null;
+
+    //   await user.save();
+    // }
+    // if (!user) return next(handleError(404, 'User does not exist.'));
+
+    if (!user) {
+      return next(handleError(404, 'User does not exist.'));
+    } else {
       user.verified = true;
       user.emailToken = null;
 
       await user.save();
     }
-    if (!user) return next(handleError(404, 'User does not exist.'));
 
     const confirmPassword = await bcrypt.compare(
       req.body.password,

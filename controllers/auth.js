@@ -43,12 +43,11 @@ export const register = async (req, res, next) => {
     };
 
     const savedUser = await user.save();
-    // res.send(req.headers.host);
 
     transporter.sendMail(mail, (err, info) => {
       if (err) {
-        // next(handleError(404, 'Email does not exist.'));
-        // res.send(err);
+        next(handleError(404, 'Email does not exist.'));
+
         console.log(err);
       } else {
         res.status(200).json(info);
@@ -85,6 +84,8 @@ export const login = async (req, res, next) => {
       user.password
     );
     if (!confirmPassword) return next(handleError(400, 'Password incorrect.'));
+
+    user.verified = true;
 
     const token = jwt.sign({ id: user._id }, process.env.JWT);
 

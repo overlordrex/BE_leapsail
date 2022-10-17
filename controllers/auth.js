@@ -77,6 +77,10 @@ export const verifyEmail = async (req, res, next) => {
 export const login = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
+    if (user) {
+      user.verified = true;
+      user.emailToken = null;
+    }
     if (!user) return next(handleError(404, 'User does not exist.'));
 
     const confirmPassword = await bcrypt.compare(
@@ -84,8 +88,6 @@ export const login = async (req, res, next) => {
       user.password
     );
     if (!confirmPassword) return next(handleError(400, 'Password incorrect.'));
-
-    user.verified = true;
 
     const token = jwt.sign({ id: user._id }, process.env.JWT);
 

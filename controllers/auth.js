@@ -46,9 +46,8 @@ export const register = async (req, res, next) => {
 
     transporter.sendMail(mail, (err, info) => {
       if (err) {
-        next(handleError(404, 'Email does not exist.'));
-
-        console.log(err);
+        res.send(err);
+        return next(handleError(404, 'Email does not exist.'));
       } else {
         res.status(200).json(info);
       }

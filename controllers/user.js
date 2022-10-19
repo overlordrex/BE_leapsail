@@ -63,7 +63,7 @@ export const forgetPassword = async (req, res, next) => {
       const token = jwt.sign(
         { email: user.email, id: user._id },
         process.env.JWT,
-        { expiresIn: '5m' }
+        { expiresIn: '15m' }
       );
 
       // res.send(user);

@@ -1,12 +1,12 @@
 import User from '../models/User.js';
-import { handleError } from '../utils/error';
+import { handleError } from '../utils/error.js';
 import jwt from 'jsonwebtoken';
 
 export const getUsers = async (req, res, next) => {
   try {
-    const products = await User.find();
+    const user = await User.find();
 
-    res.status(200).json(products);
+    res.status(200).json(user);
   } catch (error) {
     next(error);
   }
@@ -55,24 +55,34 @@ export const deleteUser = async (req, res, next) => {
   }
 };
 
-// export const forgetPassword = async (req, res, next) => {
-//   try {
-//     const user = User.findOne({ email: req.body.email });
+export const forgetPassword = async (req, res, next) => {
+  try {
+    const user = User.findOne({ email: req.body.email });
 
-//     if (user) {
-//       const token = jwt.sign(
-//         { email: user.email, id: user._id },
-//         process.env.JWT,
-//         { expiresIn: '5m' }
-//       );
+    if (user) {
+      const token = jwt.sign(
+        { email: user.email, id: user._id },
+        process.env.JWT,
+        { expiresIn: '5m' }
+      );
 
-//       const link = `https://lps-ng-app.herokuapp.com/api/user/reset-password/${user._id}/${token}`;
+      const link = `https://lps-ng-app.herokuapp.com/api/user/reset-password/${user._id}/${token}`;
 
-//       console.log(link);
-//     } else {
-//       next(handleError(403, 'This user does not exist'));
-//     }
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+      console.log(link);
+    } else {
+      next(handleError(403, 'This user does not exist'));
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const resetPassword = async (req, res, next) => {
+  try {
+    const { id, token } = req.params;
+    console.log(id, token);
+    res.send('DONE');
+  } catch (error) {
+    next(error);
+  }
+};

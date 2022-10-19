@@ -57,7 +57,7 @@ export const deleteUser = async (req, res, next) => {
 
 export const forgetPassword = async (req, res, next) => {
   try {
-    const user = User.findOne({ email: req.body.email });
+    const user = await User.findOne({ email: req.body.email });
 
     if (user) {
       const token = jwt.sign(
@@ -66,6 +66,7 @@ export const forgetPassword = async (req, res, next) => {
         { expiresIn: '5m' }
       );
 
+      res.send(user);
       const link = `https://lps-ng-app.herokuapp.com/api/user/reset-password/${user._id}/${token}`;
 
       console.log(link);
@@ -80,6 +81,7 @@ export const forgetPassword = async (req, res, next) => {
 export const resetPassword = async (req, res, next) => {
   try {
     const { id, token } = req.params;
+    res.send({ id, token });
     console.log(id, token);
     res.send('DONE');
   } catch (error) {

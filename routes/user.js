@@ -20,6 +20,6 @@ router.delete('/:id', verifyToken, deleteUser);
 
 router.post('/forgot-password', forgetPassword);
 
-router.get('/reset-password/:id/:token', forgetPassword);
+router.get('/reset-password/:id/:token', resetPassword);
 
 export default router;

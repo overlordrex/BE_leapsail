@@ -79,11 +79,12 @@ export const forgetPassword = async (req, res, next) => {
 };
 
 export const resetPassword = async (req, res, next) => {
+  const { id, token } = req.params;
+  const user = await User.findOne({ _id: id });
+  if (!user) return next(handleError(404, 'User does not exist.'));
   try {
-    const { id, token } = req.params;
-    res.send({ id, token });
-    console.log(id, token);
-    res.send('DONE');
+    const verify = jwt.verify(token, process.env.JWT);
+    res.send('Verified');
   } catch (error) {
     next(error);
   }

@@ -66,8 +66,9 @@ export const forgetPassword = async (req, res, next) => {
         { expiresIn: '5m' }
       );
 
-      res.send(user);
+      // res.send(user);
       const link = `https://lps-ng-app.herokuapp.com/api/user/reset-password/${user._id}/${token}`;
+      res.send(link);
 
       console.log(link);
     } else {

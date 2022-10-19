@@ -7,6 +7,7 @@ const EmployeeSchema = new mongoose.Schema(
     email: { type: String, unique: true },
     password: { type: String },
     isAdmin: { type: Boolean, default: false },
+    department: { type: String },
   },
   { timestamps: true }
 );

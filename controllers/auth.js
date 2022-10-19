@@ -57,22 +57,6 @@ export const register = async (req, res, next) => {
   }
 };
 
-export const verifyEmail = async (req, res, next) => {
-  try {
-    const token = req.query.token;
-    const user = await User.findOne({ emailToken: token });
-
-    if (user) {
-      user.emailToken = null;
-      user.verified = true;
-
-      await user.save();
-    }
-  } catch (error) {
-    next(error);
-  }
-};
-
 export const login = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
@@ -109,16 +93,6 @@ export const login = async (req, res, next) => {
       })
       .status(200)
       .json(others);
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getUsers = async (req, res, next) => {
-  try {
-    const products = await User.find();
-
-    res.status(200).json(products);
   } catch (error) {
     next(error);
   }

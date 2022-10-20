@@ -130,6 +130,7 @@ export const forgetPassword = async (req, res, next) => {
 
 export const resetPassword = async (req, res, next) => {
   const { id, token } = req.params;
+  res.redirect('https://leapsail-web.netlify.app/forgot-password');
   res.send({ id, token });
   // const user = await User.findOne({ _id: id });
   // if (!user) return next(handleError(404, 'User does not exist.'));

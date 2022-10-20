@@ -102,6 +102,7 @@ export const forgetPassword = async (req, res, next) => {
       //   { email: req.body.email },
       //   { $set: { token: randomString } }
       // );
+
       const link = `https://lps-ng-app.herokuapp.com/api/user/reset-password/${user._id}/${token}`;
 
       const mail = {
@@ -130,8 +131,18 @@ export const forgetPassword = async (req, res, next) => {
 
 export const resetPassword = async (req, res, next) => {
   const { id, token } = req.params;
-  res.redirect('https://leapsail-web.netlify.app/forgot-password');
-  res.send({ id, token });
+
+  // res.redirect('https://leapsail-web.netlify.app/forgot-password');
+  // res.send({ id, token });
+  const user = await User.findOne({ _id: id });
+  if (!user) return next(handleError(404, 'User does not exist.'));
+
+  try {
+    const verify = jwt.verify(token, process.env.JWT);
+    res.redirect('https://leapsail-web.netlify.app/forgot-password');
+  } catch (error) {
+    next(error);
+  }
   // const user = await User.findOne({ _id: id });
   // if (!user) return next(handleError(404, 'User does not exist.'));
   // try {

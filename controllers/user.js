@@ -3,6 +3,7 @@ import { handleError } from '../utils/error.js';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
+// import { Link } from 'react-router-dom';
 
 // const sendRestPasswordMail = async (name , email , token)=>{
 //   try {
@@ -101,15 +102,14 @@ export const forgetPassword = async (req, res, next) => {
       //   { email: req.body.email },
       //   { $set: { token: randomString } }
       // );
+      const link = `https://lps-ng-app.herokuapp.com/api/user/reset-password/${user._id}/${token}`;
 
       const mail = {
         from: 'atuzierex0@gmail.com',
         to: user.email,
         subject: 'Reset Password',
-        html: `<p> Hi ${user.firstname} , Click the link to reset Password <a href="">Reset Password</a> </p>`,
+        html: `<p> Hi ${user.firstname} , Click the link to reset Password <a href=${link}>Reset Password</a> </p>`,
       };
-
-      const link = `https://lps-ng-app.herokuapp.com/api/user/reset-password/${user._id}/${token}`;
 
       transporter.sendMail(mail, function (err, info) {
         if (err) {
@@ -130,7 +130,7 @@ export const forgetPassword = async (req, res, next) => {
 
 export const resetPassword = async (req, res, next) => {
   const { id, token } = req.params;
-  console.log({ id, token });
+  res.send({ id, token });
   // const user = await User.findOne({ _id: id });
   // if (!user) return next(handleError(404, 'User does not exist.'));
   // try {

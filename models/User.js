@@ -8,6 +8,7 @@ const UserSchema = new mongoose.Schema(
     password: { type: String },
     emailToken: { type: String },
     verified: { type: Boolean, default: false },
+    token: { type: String, default: '' },
   },
   { timestamps: true }
 );

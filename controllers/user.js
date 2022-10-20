@@ -1,6 +1,27 @@
 import User from '../models/User.js';
 import { handleError } from '../utils/error.js';
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
+import nodemailer from 'nodemailer';
+
+// const sendRestPasswordMail = async (name , email , token)=>{
+//   try {
+
+//   } catch (error) {
+//     res.status(400).send(error)
+//   }
+// }
+
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false,
+  requireTLS: true,
+  auth: {
+    user: 'atuzierex0@gmail.com',
+    pass: 'rroekeylxsylmzqc',
+  },
+});
 
 export const getUsers = async (req, res, next) => {
   try {
@@ -60,17 +81,40 @@ export const forgetPassword = async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email });
 
     if (user) {
-      const token = jwt.sign(
-        { email: user.email, id: user._id },
-        process.env.JWT,
-        { expiresIn: '15m' }
+      const randomString = crypto.randomBytes(64).toString('hex');
+
+      const data = await User.updateOne(
+        { email: req.body.email },
+        { $set: { token: randomString } }
       );
 
-      // res.send(user);
-      const link = `https://lps-ng-app.herokuapp.com/api/user/reset-password/${user._id}/${token}`;
-      res.send(link);
+      const mail = {
+        from: 'atuzierex0@gmail.com',
+        to: user.email,
+        subject: 'Reset Password',
+        html: `<p> Hi ${user.firstname} , Click the link to reset Password <a href="https://lps-ng-app.herokuapp.com/api/user/reset-password?token=${randomString}">Reset Password</a> </p>`,
+      };
 
-      console.log(link);
+      transporter.sendMail(mail, function (err, info) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('Mail has been sent ', info.response);
+        }
+      });
+
+      res.status(200).json('Check your email and reset password');
+      // const token = jwt.sign(
+      //   { email: user.email, id: user._id },
+      //   process.env.JWT,
+      //   { expiresIn: '15m' }
+      // );
+
+      // res.send(user);
+      // const link = `https://lps-ng-app.herokuapp.com/api/user/reset-password/${user._id}/${token}`;
+      // res.send(link);
+
+      // console.log(link);
     } else {
       next(handleError(403, 'This user does not exist'));
     }

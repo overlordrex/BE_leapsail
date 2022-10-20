@@ -44,7 +44,7 @@ export const register = async (req, res, next) => {
 
     const savedUser = await user.save();
 
-    transporter.sendMail(mail, (err, info) => {
+    transporter.sendMail(mail, (err, info, next) => {
       if (err) {
         res.send(err);
         return next(handleError(404, 'Email does not exist.'));
@@ -60,13 +60,6 @@ export const register = async (req, res, next) => {
 export const login = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
-    // if (user) {
-    //   user.verified = true;
-    //   user.emailToken = null;
-
-    //   await user.save();
-    // }
-    // if (!user) return next(handleError(404, 'User does not exist.'));
 
     if (!user) {
       return next(handleError(404, 'User does not exist.'));

@@ -4,15 +4,6 @@ import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcrypt';
-// import { Link } from 'react-router-dom';
-
-// const sendRestPasswordMail = async (name , email , token)=>{
-//   try {
-
-//   } catch (error) {
-//     res.status(400).send(error)
-//   }
-// }
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -82,27 +73,12 @@ export const forgetPassword = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
 
-    // res.send(user);
-    // const link = `https://lps-ng-app.herokuapp.com/api/user/reset-password/${user._id}/${token}`;
-    // res.send(link);
-
-    // console.log(link);
-
-    // https://lps-ng-app.herokuapp.com/api/user/reset-password?token=${randomString}
-
     if (user) {
-      // const randomString = crypto.randomBytes(64).toString('hex');
-
       const token = jwt.sign(
         { email: user.email, id: user._id },
         process.env.JWT,
         { expiresIn: '15m' }
       );
-
-      // const data = await User.updateOne(
-      //   { email: req.body.email },
-      //   { $set: { token: randomString } }
-      // );
 
       const link = `https://lps-ng-app.herokuapp.com/api/user/reset-password/${user._id}/${token}`;
 
@@ -133,8 +109,6 @@ export const forgetPassword = async (req, res, next) => {
 export const resetPassword = async (req, res, next) => {
   const { id, token } = req.params;
 
-  // res.redirect('https://leapsail-web.netlify.app/forgot-password');
-  // res.send({ id, token });
   const user = await User.findOne({ _id: id });
   if (!user) return next(handleError(404, 'User does not exist.'));
 
@@ -143,26 +117,6 @@ export const resetPassword = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-  // const user = await User.findOne({ _id: id });
-  // if (!user) return next(handleError(404, 'User does not exist.'));
-  // try {
-  //   const verify = jwt.verify(token, process.env.JWT);
-  //   res.send('Verified');
-  // } catch (error) {
-  //   next(error);
-  // }
-
-  // try {
-  //   const token = req.query.token;
-  //   const tokenData = await User.findOne({ token: token });
-
-  //   if (tokenData) {
-  //     const password = req.body.password;
-  //   } else {
-  //   }
-  // } catch (error) {
-  //   next(error);
-  // }
 };
 
 export const resetPassword2 = async (req, res, next) => {

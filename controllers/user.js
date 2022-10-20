@@ -80,20 +80,36 @@ export const forgetPassword = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
 
-    if (user) {
-      const randomString = crypto.randomBytes(64).toString('hex');
+    // res.send(user);
+    // const link = `https://lps-ng-app.herokuapp.com/api/user/reset-password/${user._id}/${token}`;
+    // res.send(link);
 
-      const data = await User.updateOne(
-        { email: req.body.email },
-        { $set: { token: randomString } }
+    // console.log(link);
+
+    // https://lps-ng-app.herokuapp.com/api/user/reset-password?token=${randomString}
+
+    if (user) {
+      // const randomString = crypto.randomBytes(64).toString('hex');
+
+      const token = jwt.sign(
+        { email: user.email, id: user._id },
+        process.env.JWT,
+        { expiresIn: '15m' }
       );
+
+      // const data = await User.updateOne(
+      //   { email: req.body.email },
+      //   { $set: { token: randomString } }
+      // );
 
       const mail = {
         from: 'atuzierex0@gmail.com',
         to: user.email,
         subject: 'Reset Password',
-        html: `<p> Hi ${user.firstname} , Click the link to reset Password <a href="https://lps-ng-app.herokuapp.com/api/user/reset-password?token=${randomString}">Reset Password</a> </p>`,
+        html: `<p> Hi ${user.firstname} , Click the link to reset Password <a href="">Reset Password</a> </p>`,
       };
+
+      const link = `https://lps-ng-app.herokuapp.com/api/user/reset-password/${user._id}/${token}`;
 
       transporter.sendMail(mail, function (err, info) {
         if (err) {
@@ -104,17 +120,6 @@ export const forgetPassword = async (req, res, next) => {
       });
 
       res.status(200).json('Check your email and reset password');
-      // const token = jwt.sign(
-      //   { email: user.email, id: user._id },
-      //   process.env.JWT,
-      //   { expiresIn: '15m' }
-      // );
-
-      // res.send(user);
-      // const link = `https://lps-ng-app.herokuapp.com/api/user/reset-password/${user._id}/${token}`;
-      // res.send(link);
-
-      // console.log(link);
     } else {
       next(handleError(403, 'This user does not exist'));
     }
@@ -125,12 +130,25 @@ export const forgetPassword = async (req, res, next) => {
 
 export const resetPassword = async (req, res, next) => {
   const { id, token } = req.params;
-  const user = await User.findOne({ _id: id });
-  if (!user) return next(handleError(404, 'User does not exist.'));
-  try {
-    const verify = jwt.verify(token, process.env.JWT);
-    res.send('Verified');
-  } catch (error) {
-    next(error);
-  }
+  console.log({ id, token });
+  // const user = await User.findOne({ _id: id });
+  // if (!user) return next(handleError(404, 'User does not exist.'));
+  // try {
+  //   const verify = jwt.verify(token, process.env.JWT);
+  //   res.send('Verified');
+  // } catch (error) {
+  //   next(error);
+  // }
+
+  // try {
+  //   const token = req.query.token;
+  //   const tokenData = await User.findOne({ token: token });
+
+  //   if (tokenData) {
+  //     const password = req.body.password;
+  //   } else {
+  //   }
+  // } catch (error) {
+  //   next(error);
+  // }
 };

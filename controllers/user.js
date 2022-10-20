@@ -138,8 +138,7 @@ export const resetPassword = async (req, res, next) => {
   if (!user) return next(handleError(404, 'User does not exist.'));
 
   try {
-    const verify = jwt.verify(token, process.env.JWT);
-    res.redirect('https://leapsail-web.netlify.app/forgot-password');
+    res.redirect(`https://leapsail-web.netlify.app/reset-password/${id}`);
   } catch (error) {
     next(error);
   }

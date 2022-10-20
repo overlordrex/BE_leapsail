@@ -6,6 +6,7 @@ import {
   deleteUser,
   forgetPassword,
   resetPassword,
+  resetPassword2,
 } from '../controllers/user.js';
 import { verifyToken } from '../utils/verifyToken.js';
 const router = express.Router();
@@ -21,5 +22,7 @@ router.delete('/:id', verifyToken, deleteUser);
 router.post('/forgot-password', forgetPassword);
 
 router.get('/reset-password/:id/:token', resetPassword);
+
+router.post('/reset-password/:id', resetPassword2);
 
 export default router;

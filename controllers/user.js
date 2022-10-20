@@ -3,6 +3,7 @@ import { handleError } from '../utils/error.js';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
+import bcrypt from 'bcrypt';
 // import { Link } from 'react-router-dom';
 
 // const sendRestPasswordMail = async (name , email , token)=>{
@@ -162,4 +163,25 @@ export const resetPassword = async (req, res, next) => {
   // } catch (error) {
   //   next(error);
   // }
+};
+
+export const resetPassword2 = async (req, res, next) => {
+  const { id } = req.params;
+
+  const user = await User.findOne({ _id: id });
+  if (!user) return next(handleError(404, 'User does not exist.'));
+
+  try {
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(req.body.password, salt);
+    const userData = await User.findByIdAndUpdate(
+      { _id: id },
+      { $set: { password: hash } }
+    );
+    res
+      .status(200)
+      .json({ msg: 'User password has been rest', data: userData });
+  } catch (error) {
+    next(error);
+  }
 };

@@ -38,20 +38,18 @@ export const register = async (req, res, next) => {
       to: user.email,
       subject: 'Leapsail Email verification',
       html: `<h2>${user.firstname}, Thanks for registering</h2>
-      <h4>Please click the link to verify your email</h4>
+      <h4>Please verify your email to continue</h4>
       <a href="https://lps-ng-app.herokuapp.com/api/auth/verify-email?token=${user.emailToken}">Verify your Email</a>`,
     };
 
     await user.save();
 
-    transporter.sendMail(mail, (err, info) => {
+    transporter.sendMail(mail, (err, info, next) => {
       if (err) {
-        // res.send(err);
-        // return next(handleError(404, 'Email does not exist.'));
-        console.log(err);
+        res.send(err);
+        return next(handleError(404, 'Email does not exist.'));
       } else {
-        console.log('Verification email has been sent to you account');
-        // res.status(200).json();
+        res.status(200).json(info);
       }
     });
   } catch (error) {
@@ -61,21 +59,6 @@ export const register = async (req, res, next) => {
 
 export const verifyEmail = async (req, res, next) => {
   try {
-    const token = req.query.token;
-
-    const user = await User.findOne({ emailToken: token });
-
-    if (!user) {
-      res.redirect('https://leapsail-web.netlify.app/register');
-      return next(handleError(404, 'User does not exist.'));
-    } else {
-      user.verified = true;
-      user.emailToken = null;
-
-      await user.save();
-
-      res.redirect('https://leapsail-web.netlify.app/login');
-    }
   } catch (error) {
     next(error);
   }
@@ -85,9 +68,14 @@ export const login = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
 
-    if (!user) return next(handleError(404, 'User does not exist.'));
+    if (!user) {
+      return next(handleError(404, 'User does not exist.'));
+    } else {
+      user.verified = true;
+      user.emailToken = null;
 
-    if (!user.verified) return next(handleError(404, 'Invalid Email.'));
+      await user.save();
+    }
 
     const confirmPassword = await bcrypt.compare(
       req.body.password,

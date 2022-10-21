@@ -60,7 +60,7 @@ export const register = async (req, res, next) => {
 export const verifyEmail = async (req, res, next) => {
   try {
     const token = req.query.token;
-    res.semd(token);
+    res.send(token);
   } catch (error) {
     next(error);
   }

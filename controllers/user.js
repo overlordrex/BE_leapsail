@@ -73,6 +73,8 @@ export const forgetPassword = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
 
+    if (!user.verified) return next(handleError(404, 'This email is Invalid.'));
+
     if (user) {
       const token = jwt.sign(
         { email: user.email, id: user._id },

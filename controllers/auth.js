@@ -60,7 +60,18 @@ export const register = async (req, res, next) => {
 export const verifyEmail = async (req, res, next) => {
   try {
     const token = req.query.token;
-    res.send(token);
+    const user = await User.findOne({ emailToken: token });
+
+    if (!user) {
+      res.redirect('https://leapsail-web.netlify.app/register');
+      return next(handleError(404, 'User does not exist.'));
+    } else {
+      user.verified = true;
+      user.emailToken = null;
+
+      await user.save();
+      res.redirect('https://leapsail-web.netlify.app/login');
+    }
   } catch (error) {
     next(error);
   }
@@ -69,15 +80,9 @@ export const verifyEmail = async (req, res, next) => {
 export const login = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
+    if (!user) return next(handleError(404, 'User does not exist.'));
 
-    if (!user) {
-      return next(handleError(404, 'User does not exist.'));
-    } else {
-      user.verified = true;
-      user.emailToken = null;
-
-      await user.save();
-    }
+    if (!user.verified) return next(handleError(404, 'Invalid Email.'));
 
     const confirmPassword = await bcrypt.compare(
       req.body.password,

@@ -9,7 +9,7 @@ const ContactSchema = new mongoose.Schema(
     enquiryType: { type: String },
     others: { type: String, default: '' },
     duration: { type: String, default: '' },
-    payout: { type: String, unique: true },
+    timeZone: { type: String },
   },
   { timestamps: true }
 );

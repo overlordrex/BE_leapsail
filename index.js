@@ -6,6 +6,8 @@ import cookieParser from 'cookie-parser';
 
 import authRoute from './routes/auth.js';
 import userRoute from './routes/user.js';
+import contactRoute from './routes/contact.js';
+import employeeRoute from './routes/employee.js';
 
 const app = express();
 dotenv.config();
@@ -21,8 +23,10 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-app.use('/api/auth', authRoute);
-app.use('/api/user', userRoute);
+app.use('/leapsail/api/auth', authRoute);
+app.use('/leapsail/api/user', userRoute);
+app.use('/leapsail/api/contact', contactRoute);
+app.use('/leapsail/api/employee', employeeRoute);
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;

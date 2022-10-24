@@ -23,6 +23,6 @@ router.post('/forgot-password', forgetPassword);
 
 router.get('/reset-password/:id/:token', resetPassword);
 
-router.post('/reset-password/:id', resetPassword2);
+router.put('/reset-password/:id', resetPassword2);
 
 export default router;

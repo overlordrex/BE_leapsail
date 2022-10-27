@@ -33,6 +33,7 @@ export const register = async (req, res, next) => {
       firstname: req.body.firstName,
       lastname: req.body.lastName,
       email: req.body.email,
+      phoneNumber: req.body.phoneNumber,
       password: hash,
       emailToken: crypto.randomBytes(64).toString('hex'),
     });

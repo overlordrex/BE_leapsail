@@ -10,6 +10,10 @@ const ContactSchema = new mongoose.Schema(
     others: { type: String, default: '' },
     duration: { type: String, default: '' },
     timeZone: { type: String },
+    nameOfOrg: { type: String },
+    fullname2: { type: String },
+    position: { type: String },
+    email2: { type: String },
   },
   { timestamps: true }
 );

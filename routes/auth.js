@@ -3,15 +3,15 @@ import {
   login,
   register,
   verifyEmail,
-  sendOTP,
-  verifyMobile,
+  // sendOTP,
+  // verifyMobile,
 } from '../controllers/auth.js';
 const router = express.Router();
 
 router.post('/register', register);
 router.get('/verify-email', verifyEmail);
-router.post('/send-otp', sendOTP);
-router.post('/verify-otp', verifyMobile);
+// router.post('/send-otp', sendOTP);
+// router.post('/verify-otp', verifyMobile);
 router.post('/login', login);
 
 export default router;

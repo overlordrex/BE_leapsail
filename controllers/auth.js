@@ -5,6 +5,10 @@ import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = require('twilio')(accountSid, authToken);
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   secure: false,
@@ -57,6 +61,8 @@ export const register = async (req, res, next) => {
   }
 };
 
+//employees.map((employee)=> employee.id === event.current.id ? employee)
+
 export const verifyEmail = async (req, res, next) => {
   try {
     const token = req.query.token;
@@ -75,6 +81,48 @@ export const verifyEmail = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+export const sendOTP = async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if (!user) return next(handleError(404, 'User does not exist.'));
+  try {
+    client.verify.v2
+      .services('VAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
+      .verifications.create({ to: '+234' + user.phoneNumber, channel: 'sms' })
+      .then((verification) => {
+        console.log(verification.status);
+        return res.status(200).json(verification);
+      })
+      .catch((error) => {
+        return res.status(400).json(error);
+      });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const verifyMobile = async (req, res, next) => {
+  try {
+    const code = req.body.otp;
+
+    const user = await User.findById(req.params.id);
+    if (!user) return next(handleError(404, 'User does not exist.'));
+
+    client.verify.v2
+      .services('VAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
+      .verificationChecks.create({
+        to: '+234' + user.phoneNumber,
+        code,
+      })
+      .then((verification_check) => {
+        console.log(verification_check.status);
+        return res.status(200).json(verification_check.status);
+      })
+      .catch((error) => {
+        return res.status(400).json(error);
+      });
+  } catch (error) {}
 };
 
 export const login = async (req, res, next) => {

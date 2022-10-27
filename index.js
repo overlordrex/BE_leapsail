@@ -8,6 +8,7 @@ import authRoute from './routes/auth.js';
 import userRoute from './routes/user.js';
 import contactRoute from './routes/contact.js';
 import employeeRoute from './routes/employee.js';
+import educationRoute from './routes/education.js';
 
 const app = express();
 dotenv.config();
@@ -27,6 +28,7 @@ app.use('/leapsail/api/auth', authRoute);
 app.use('/leapsail/api/user', userRoute);
 app.use('/leapsail/api/contact', contactRoute);
 app.use('/leapsail/api/employee', employeeRoute);
+app.use('/leapsail/api/education', educationRoute);
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;

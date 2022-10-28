@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const InvestmentSchema = new mongoose.Schema(
   {
@@ -9,4 +9,4 @@ const InvestmentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model('Investment', InvestmentSchema);
+module.exports = mongoose.model('Investment', InvestmentSchema);

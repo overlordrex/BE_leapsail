@@ -5,12 +5,10 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
-// import twilio from twilio;
 
 const accountSid = 'ACce89c60ee42315c20e97d347bb5564f9';
 const authToken = 'ce31e10cb0f77a42c75677c0a788f059';
 
-// const client = twilio(accountSid, authToken);
 const client = require('twilio')(accountSid, authToken);
 
 const transporter = nodemailer.createTransport({

@@ -1,9 +1,9 @@
-import User from '../models/User.js';
-import { handleError } from '../utils/error.js';
-import jwt from 'jsonwebtoken';
-// import crypto from 'crypto';
-import nodemailer from 'nodemailer';
-import bcrypt from 'bcrypt';
+const User = require('../models/User.js');
+const handleError = require('../utils/error');
+const jwt = require('jsonwebtoken');
+
+const bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const getUsers = async (req, res, next) => {
+const getUsers = async (req, res, next) => {
   try {
     const user = await User.find();
 
@@ -26,7 +26,7 @@ export const getUsers = async (req, res, next) => {
   }
 };
 
-export const getUser = async (req, res, next) => {
+const getUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
     if (!user) return next(handleError(404, 'user not found'));
@@ -36,7 +36,7 @@ export const getUser = async (req, res, next) => {
   }
 };
 
-export const updateUser = async (req, res, next) => {
+const updateUser = async (req, res, next) => {
   if (req.params.id === req.user.id) {
     try {
       const user = await User.findByIdAndUpdate(
@@ -56,7 +56,7 @@ export const updateUser = async (req, res, next) => {
   }
 };
 
-export const deleteUser = async (req, res, next) => {
+const deleteUser = async (req, res, next) => {
   if (req.params.id === req.user.id) {
     try {
       await User.findByIdAndDelete(req.params.id);
@@ -70,7 +70,7 @@ export const deleteUser = async (req, res, next) => {
   }
 };
 
-export const forgetPassword = async (req, res, next) => {
+const forgetPassword = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
 
@@ -109,7 +109,7 @@ export const forgetPassword = async (req, res, next) => {
   }
 };
 
-export const resetPassword = async (req, res, next) => {
+const resetPassword = async (req, res, next) => {
   const { id } = req.params;
 
   const user = await User.findOne({ _id: id });
@@ -122,7 +122,7 @@ export const resetPassword = async (req, res, next) => {
   }
 };
 
-export const resetPassword2 = async (req, res, next) => {
+const resetPassword2 = async (req, res, next) => {
   const { id } = req.params;
 
   const user = await User.findOne({ _id: id });
@@ -141,4 +141,14 @@ export const resetPassword2 = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+module.exports = {
+  getUser,
+  getUsers,
+  updateUser,
+  deleteUser,
+  forgetPassword,
+  resetPassword,
+  resetPassword2,
 };

@@ -1,7 +1,7 @@
-import Employee from '../models/Employee.js';
-import { handleError } from '../utils/error.js';
+const Employee = require('../models/Employee.js');
+const handleError = require('../utils/error');
 
-export const addEmployee = async (req, res, next) => {
+const addEmployee = async (req, res, next) => {
   const employeeInfo = new Employee(req.body);
   try {
     const employee = await employeeInfo.save();
@@ -11,7 +11,7 @@ export const addEmployee = async (req, res, next) => {
   }
 };
 
-export const getEmployees = async (req, res, next) => {
+const getEmployees = async (req, res, next) => {
   try {
     const employees = await Employee.find();
 
@@ -21,7 +21,7 @@ export const getEmployees = async (req, res, next) => {
   }
 };
 
-export const getEmployee = async (req, res, next) => {
+const getEmployee = async (req, res, next) => {
   try {
     const employee = await Employee.findOne({ _id: req.params.id });
 
@@ -32,11 +32,8 @@ export const getEmployee = async (req, res, next) => {
   }
 };
 
-export const updateEmployee = async (req, res, next) => {
-  // const user = await Contact.findOne({ _id: req.params.id });
-
+const updateEmployee = async (req, res, next) => {
   try {
-    // if (user._id === req.params.id) {
     await Employee.findByIdAndUpdate(
       req.params.id,
       { $set: req.body },
@@ -44,38 +41,25 @@ export const updateEmployee = async (req, res, next) => {
     );
 
     res.status(200).json('Updated successfully');
-    // res.send({ userId: user._id, params: req.params.id, user: user });
-    // res.send('works like magic');
-    // } else {
-    //   return next(handleError(404, 'Not allowed'));
-    // }
   } catch (error) {
     next(error);
   }
 };
 
-export const deleteEmployee = async (req, res, next) => {
+const deleteEmployee = async (req, res, next) => {
   try {
-    // const user = await Contact.findOne({ _id: req.params.id });
-
-    // if (user._id === req.params.id) {
     await Employee.findByIdAndDelete(req.params.id);
 
     res.status(200).json('deleted successfully');
-    // } else {
-    //   return next(handleError(404, 'Not allowed'));
-    // }
   } catch (error) {
     next(error);
   }
 };
 
-// export const department = async (req, res, next) => {
-//   try {
-//     const department = await Employee.find().sort({ department: 1 });
-//     if () return next(handleError(404, 'Not found'));
-//     res.status(200).json(video);
-//   } catch (err) {
-//     next(err);
-//   }
-// };
+module.exports = {
+  deleteEmployee,
+  getEmployees,
+  getEmployee,
+  updateEmployee,
+  addEmployee,
+};

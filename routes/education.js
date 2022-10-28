@@ -1,10 +1,10 @@
-import express from 'express';
+const express = require('express');
 
-import {
+const {
   addEducation,
   getEducations,
   getEducation,
-} from '../controllers/education.js';
+} = require('../controllers/education.js');
 
 const router = express.Router();
 
@@ -12,4 +12,4 @@ router.post('/', addEducation);
 router.get('/', getEducations);
 router.get('/find/:id', getEducation);
 
-export default router;
+module.exports = router;

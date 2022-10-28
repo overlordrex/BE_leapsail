@@ -1,7 +1,7 @@
-import Contact from '../models/Contact.js';
-import { handleError } from '../utils/error.js';
+const Contact = require('../models/Contact.js');
+const handleError = require('../utils/error');
 
-export const addContact = async (req, res, next) => {
+const addContact = async (req, res, next) => {
   const contactInfo = new Contact(req.body);
   try {
     const userContact = await contactInfo.save();
@@ -11,7 +11,7 @@ export const addContact = async (req, res, next) => {
   }
 };
 
-export const getContacts = async (req, res, next) => {
+const getContacts = async (req, res, next) => {
   try {
     const contacts = await Contact.find();
 
@@ -21,7 +21,7 @@ export const getContacts = async (req, res, next) => {
   }
 };
 
-export const getContact = async (req, res, next) => {
+const getContact = async (req, res, next) => {
   try {
     const contact = await Contact.findOne({ _id: req.params.id });
 
@@ -32,11 +32,8 @@ export const getContact = async (req, res, next) => {
   }
 };
 
-export const updateContact = async (req, res, next) => {
-  // const user = await Contact.findOne({ _id: req.params.id });
-
+const updateContact = async (req, res, next) => {
   try {
-    // if (user._id === req.params.id) {
     await Contact.findByIdAndUpdate(
       req.params.id,
       { $set: req.body },
@@ -44,28 +41,25 @@ export const updateContact = async (req, res, next) => {
     );
 
     res.status(200).json('Updated successfully');
-    // res.send({ userId: user._id, params: req.params.id, user: user });
-    // res.send('works like magic');
-    // } else {
-    //   return next(handleError(404, 'Not allowed'));
-    // }
   } catch (error) {
     next(error);
   }
 };
 
-export const deleteContact = async (req, res, next) => {
+const deleteContact = async (req, res, next) => {
   try {
-    // const user = await Contact.findOne({ _id: req.params.id });
-
-    // if (user._id === req.params.id) {
     await Contact.findByIdAndDelete(req.params.id);
 
     res.status(200).json('deleted successfully');
-    // } else {
-    //   return next(handleError(404, 'Not allowed'));
-    // }
   } catch (error) {
     next(error);
   }
+};
+
+module.exports = {
+  deleteContact,
+  updateContact,
+  getContacts,
+  getContact,
+  addContact,
 };

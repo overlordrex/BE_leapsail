@@ -1,7 +1,7 @@
-import Education from '../models/Education.js';
-import { handleError } from '../utils/error.js';
+const Education = require('../models/Education.js');
+const handleError = require('../utils/error');
 
-export const addEducation = async (req, res, next) => {
+const addEducation = async (req, res, next) => {
   const employeeInfo = new Education(req.body);
   try {
     const employee = await employeeInfo.save();
@@ -11,7 +11,7 @@ export const addEducation = async (req, res, next) => {
   }
 };
 
-export const getEducations = async (req, res, next) => {
+const getEducations = async (req, res, next) => {
   try {
     const educationsPackages = await Education.find();
 
@@ -21,7 +21,7 @@ export const getEducations = async (req, res, next) => {
   }
 };
 
-export const getEducation = async (req, res, next) => {
+const getEducation = async (req, res, next) => {
   try {
     const educationsPackage = await Education.findOne({ _id: req.params.id });
 
@@ -30,4 +30,10 @@ export const getEducation = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+module.exports = {
+  getEducation,
+  getEducations,
+  addEducation,
 };

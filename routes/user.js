@@ -1,5 +1,5 @@
-import express from 'express';
-import {
+const express = require('express');
+const {
   getUsers,
   getUser,
   updateUser,
@@ -7,8 +7,10 @@ import {
   forgetPassword,
   resetPassword,
   resetPassword2,
-} from '../controllers/user.js';
-import { verifyToken } from '../utils/verifyToken.js';
+} = require('../controllers/user.js');
+
+const verifyToken = require('../utils/verifyToken.js');
+
 const router = express.Router();
 
 router.get('/', getUsers);
@@ -25,4 +27,4 @@ router.get('/reset-password/:id/:token', resetPassword);
 
 router.put('/reset-password/:id', resetPassword2);
 
-export default router;
+module.exports = router;

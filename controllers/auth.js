@@ -97,7 +97,7 @@ export const sendOTP = async (req, res, next) => {
   try {
     client.verify.v2
       .services(serviceID)
-      .verifications.create({ to: '+234' + user.phoneNumber, channel: 'sms' })
+      .verifications.create({ to: user.phoneNumber, channel: 'sms' })
       .then((verification) => {
         console.log(verification.status);
         return res.status(200).json(verification);

@@ -99,7 +99,7 @@ export const sendOTP = async (req, res, next) => {
     // res.send(user);
     client.verify.v2
       .services(serviceID)
-      .verifications.create({ to: '+2348154963477', channel: 'sms' })
+      .verifications.create({ to: '+12058823683', channel: 'sms' })
       .then((verification) => {
         console.log(verification.status);
         return res.status(200).json(verification);

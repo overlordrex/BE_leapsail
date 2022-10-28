@@ -110,28 +110,28 @@ export const sendOTP = async (req, res, next) => {
   }
 };
 
-// export const verifyMobile = async (req, res, next) => {
-//   try {
-//     const code = req.body.otp;
+export const verifyMobile = async (req, res, next) => {
+  try {
+    const code = req.body.otp;
 
-//     const user = await User.findById(req.params.id);
-//     if (!user) return next(handleError(404, 'User does not exist.'));
+    const user = await User.findById(req.params.id);
+    if (!user) return next(handleError(404, 'User does not exist.'));
 
-//     client.verify.v2
-//       .services('VAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
-//       .verificationChecks.create({
-//         to: '+234' + user.phoneNumber,
-//         code,
-//       })
-//       .then((verification_check) => {
-//         console.log(verification_check.status);
-//         return res.status(200).json(verification_check.status);
-//       })
-//       .catch((error) => {
-//         return res.status(400).json(error);
-//       });
-//   } catch (error) {}
-// };
+    client.verify.v2
+      .services('VAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
+      .verificationChecks.create({
+        to: '+234' + user.phoneNumber,
+        code,
+      })
+      .then((verification_check) => {
+        console.log(verification_check.status);
+        return res.status(200).json(verification_check.status);
+      })
+      .catch((error) => {
+        return res.status(400).json(error);
+      });
+  } catch (error) {}
+};
 
 export const login = async (req, res, next) => {
   try {

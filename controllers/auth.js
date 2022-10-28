@@ -99,10 +99,10 @@ export const sendOTP = async (req, res, next) => {
     .then((verification) => {
       console.log(verification.status);
       return res.status(200).json(verification);
-    })
-    .catch((error) => {
-      return res.status(400).json(error);
     });
+  // .catch((error) => {
+  //   return res.status(400).json(error);
+  // });
   // } catch (error) {
   //   next(error);
   // }

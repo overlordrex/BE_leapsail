@@ -95,16 +95,18 @@ export const sendOTP = async (req, res, next) => {
   const user = await User.findById(req.params.id);
   if (!user) return next(handleError(404, 'User does not exist.'));
   try {
-    client.verify.v2
-      .services(serviceID)
-      .verifications.create({ to: '+234' + user.phoneNumber, channel: 'sms' })
-      .then((verification) => {
-        console.log(verification.status);
-        return res.status(200).json(verification);
-      })
-      .catch((error) => {
-        return res.status(400).json(error);
-      });
+    res.send('work');
+    // res.send(user);
+    // client.verify.v2
+    //   .services(serviceID)
+    //   .verifications.create({ to: '+234' + user.phoneNumber, channel: 'sms' })
+    //   .then((verification) => {
+    //     console.log(verification.status);
+    //     return res.status(200).json(verification);
+    //   })
+    //   .catch((error) => {
+    //     return res.status(400).json(error);
+    //   });
   } catch (error) {
     next(error);
   }

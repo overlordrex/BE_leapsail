@@ -97,7 +97,7 @@ export const sendOTP = async (req, res, next) => {
   try {
     client.verify.v2
       .services(serviceID)
-      .verifications.create({ to: user.phoneNumber, channel: 'sms' })
+      .verifications.create({ to: '+234' + user.phoneNumber, channel: 'sms' })
       .then((verification) => {
         console.log(verification.status);
         return res.status(200).json(verification);
@@ -118,7 +118,7 @@ export const verifyMobile = async (req, res, next) => {
     if (!user) return next(handleError(404, 'User does not exist.'));
 
     client.verify.v2
-      .services('VAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
+      .services(serviceID)
       .verificationChecks.create({
         to: '+234' + user.phoneNumber,
         code,

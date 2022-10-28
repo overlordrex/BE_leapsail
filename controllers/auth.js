@@ -4,17 +4,20 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
-import twilio from 'twilio';
 
 // const accountSid = process.env.TWILIO_ACCOUNT_SID;
 // const authToken = process.env.TWILIO_AUTH_TOKEN;
 // const client = require('twilio')(accountSid, authToken);
 
-const serviceID = 'VA4dad51595399e49d2c0faf72be535488';
-const accountSID = 'ACce89c60ee42315c20e97d347bb5564f9';
-const authToken = 'e8e1d0bf701f32f9eeefecbfe3e24504';
+// const serviceID = 'VA4dad51595399e49d2c0faf72be535488';
+// const accountSID = 'ACce89c60ee42315c20e97d347bb5564f9';
+// const authToken = 'e8e1d0bf701f32f9eeefecbfe3e24504';
 
-const client = twilio(accountSID, authToken);
+const accountSid = 'ACce89c60ee42315c20e97d347bb5564f9';
+const authToken = 'ce31e10cb0f77a42c75677c0a788f059';
+
+// const client = twilio(accountSID, authToken);
+const client = require('twilio')(accountSid, authToken);
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -98,7 +101,7 @@ export const sendOTP = async (req, res, next) => {
     // res.send('work');
     // res.send(user);
     client.verify.v2
-      .services(serviceID)
+      .services('VA4dad51595399e49d2c0faf72be535488')
       .verifications.create({ to: '+12058823683', channel: 'sms' })
       .then((verification) => {
         console.log(verification.status);
@@ -120,7 +123,7 @@ export const verifyMobile = async (req, res, next) => {
     if (!user) return next(handleError(404, 'User does not exist.'));
 
     client.verify.v2
-      .services(serviceID)
+      .services('VA4dad51595399e49d2c0faf72be535488')
       .verificationChecks.create({
         to: '+234' + user.phoneNumber,
         code,

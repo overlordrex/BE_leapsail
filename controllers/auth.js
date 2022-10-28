@@ -95,24 +95,24 @@ export const verifyEmail = async (req, res, next) => {
 };
 
 export const sendOTP = async (req, res, next) => {
-  const user = await User.findById(req.params.id);
-  if (!user) return next(handleError(404, 'User does not exist.'));
-  try {
-    // res.send('work');
-    // res.send(user);
-    client.verify.v2
-      .services('VA4dad51595399e49d2c0faf72be535488')
-      .verifications.create({ to: '+12058823683', channel: 'sms' })
-      .then((verification) => {
-        console.log(verification.status);
-        return res.status(200).json(verification);
-      })
-      .catch((error) => {
-        return res.status(400).json(error);
-      });
-  } catch (error) {
-    next(error);
-  }
+  // const user = await User.findById(req.params.id);
+  // if (!user) return next(handleError(404, 'User does not exist.'));
+  // try {
+  // res.send('work');
+  // res.send(user);
+  client.verify.v2
+    .services('VA4dad51595399e49d2c0faf72be535488')
+    .verifications.create({ to: '+12058823683', channel: 'sms' })
+    .then((verification) => {
+      console.log(verification.status);
+      return res.status(200).json(verification);
+    })
+    .catch((error) => {
+      return res.status(400).json(error);
+    });
+  // } catch (error) {
+  //   next(error);
+  // }
 };
 
 export const verifyMobile = async (req, res, next) => {

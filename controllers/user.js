@@ -1,7 +1,7 @@
 import User from '../models/User.js';
 import { handleError } from '../utils/error.js';
 import jwt from 'jsonwebtoken';
-import crypto from 'crypto';
+// import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import bcrypt from 'bcrypt';
 
@@ -110,7 +110,7 @@ export const forgetPassword = async (req, res, next) => {
 };
 
 export const resetPassword = async (req, res, next) => {
-  const { id, token } = req.params;
+  const { id } = req.params;
 
   const user = await User.findOne({ _id: id });
   if (!user) return next(handleError(404, 'User does not exist.'));

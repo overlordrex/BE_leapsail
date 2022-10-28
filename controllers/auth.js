@@ -4,10 +4,17 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
+import twilio from 'twilio';
 
 // const accountSid = process.env.TWILIO_ACCOUNT_SID;
 // const authToken = process.env.TWILIO_AUTH_TOKEN;
 // const client = require('twilio')(accountSid, authToken);
+
+const serviceID = 'VA4dad51595399e49d2c0faf72be535488';
+const accountSID = 'ACce89c60ee42315c20e97d347bb5564f9';
+const authToken = 'e8e1d0bf701f32f9eeefecbfe3e24504';
+
+const client = twilio(accountSID, authToken);
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -84,24 +91,24 @@ export const verifyEmail = async (req, res, next) => {
   }
 };
 
-// export const sendOTP = async (req, res, next) => {
-//   const user = await User.findById(req.params.id);
-//   if (!user) return next(handleError(404, 'User does not exist.'));
-//   try {
-//     client.verify.v2
-//       .services('VAXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
-//       .verifications.create({ to: '+234' + user.phoneNumber, channel: 'sms' })
-//       .then((verification) => {
-//         console.log(verification.status);
-//         return res.status(200).json(verification);
-//       })
-//       .catch((error) => {
-//         return res.status(400).json(error);
-//       });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+export const sendOTP = async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if (!user) return next(handleError(404, 'User does not exist.'));
+  try {
+    client.verify.v2
+      .services(serviceID)
+      .verifications.create({ to: '+234' + user.phoneNumber, channel: 'sms' })
+      .then((verification) => {
+        console.log(verification.status);
+        return res.status(200).json(verification);
+      })
+      .catch((error) => {
+        return res.status(400).json(error);
+      });
+  } catch (error) {
+    next(error);
+  }
+};
 
 // export const verifyMobile = async (req, res, next) => {
 //   try {

@@ -1,11 +1,11 @@
-import express from 'express';
-import {
+const express = require('express');
+const {
   login,
   register,
   verifyEmail,
   sendOTP,
   verifyMobile,
-} from '../controllers/auth.js';
+} = require('../controllers/auth');
 const router = express.Router();
 
 router.post('/register', register);
@@ -14,4 +14,4 @@ router.get('/send-otp', sendOTP);
 router.post('/verify-otp/:id', verifyMobile);
 router.post('/login', login);
 
-export default router;
+module.exports = router;

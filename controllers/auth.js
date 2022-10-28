@@ -1,9 +1,10 @@
-import User from '../models/User.js';
-import { handleError } from '../utils/error.js';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
-import crypto from 'crypto';
-import nodemailer from 'nodemailer';
+const User = require('../models/User.js');
+const handleError = require('../utils/error');
+
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+const nodemailer = require('nodemailer');
 // import twilio from twilio;
 
 const accountSid = 'ACce89c60ee42315c20e97d347bb5564f9';
@@ -24,7 +25,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export const register = async (req, res, next) => {
+const register = async (req, res, next) => {
   try {
     const check = await User.findOne({ email: req.body.email });
     if (check) return next(handleError(404, 'User already exist.'));
@@ -65,9 +66,7 @@ export const register = async (req, res, next) => {
   }
 };
 
-//employees.map((employee)=> employee.id === event.current.id ? employee)
-
-export const verifyEmail = async (req, res, next) => {
+const verifyEmail = async (req, res, next) => {
   try {
     const token = req.query.token;
     const user = await User.findOne({ emailToken: token });
@@ -87,7 +86,7 @@ export const verifyEmail = async (req, res, next) => {
   }
 };
 
-export const sendOTP = async (req, res, next) => {
+const sendOTP = async (req, res, next) => {
   // const user = await User.findById(req.params.id);
   // if (!user) return next(handleError(404, 'User does not exist.'));
   // try {
@@ -108,7 +107,7 @@ export const sendOTP = async (req, res, next) => {
   // }
 };
 
-export const verifyMobile = async (req, res, next) => {
+const verifyMobile = async (req, res, next) => {
   try {
     const code = req.body.otp;
 
@@ -131,7 +130,7 @@ export const verifyMobile = async (req, res, next) => {
   } catch (error) {}
 };
 
-export const login = async (req, res, next) => {
+const login = async (req, res, next) => {
   try {
     const user = await User.findOne({ email: req.body.email });
     if (!user) return next(handleError(404, 'User does not exist.'));
@@ -158,3 +157,5 @@ export const login = async (req, res, next) => {
     next(error);
   }
 };
+
+module.exports = { register, verifyEmail, sendOTP, verifyMobile, login };

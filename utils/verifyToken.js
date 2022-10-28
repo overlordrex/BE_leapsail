@@ -1,7 +1,7 @@
-import jwt from 'jsonwebtoken';
-import { handleError } from './error.js';
+const jwt = require('jsonwebtoken');
+const handleError = require('./error');
 
-export const verifyToken = (req, res, next) => {
+const verifyToken = (req, res, next) => {
   const token = req.cookies.access_token;
   if (!token) return next(handleError(401, 'Unauthorized.'));
 
@@ -12,3 +12,5 @@ export const verifyToken = (req, res, next) => {
     next();
   });
 };
+
+module.exports = verifyToken;

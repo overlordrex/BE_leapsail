@@ -92,7 +92,7 @@ const sendOTP = async (req, res, next) => {
   try {
     client.verify.v2
       .services(serviceId)
-      .verifications.create({ to: user.phoneNumber, channel: 'sms' })
+      .verifications.create({ to: '+1' + user.phoneNumber, channel: 'sms' })
       .then((verification) => {
         console.log(verification.status);
         return res.status(200).json(verification);
@@ -106,21 +106,20 @@ const sendOTP = async (req, res, next) => {
 };
 
 const verifyMobile = async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+  if (!user) return next(handleError(404, 'User does not exist.'));
   try {
     const code = req.body.otp;
-
-    const user = await User.findById(req.params.id);
-    if (!user) return next(handleError(404, 'User does not exist.'));
 
     client.verify.v2
       .services('VA4dad51595399e49d2c0faf72be535488')
       .verificationChecks.create({
-        to: '+234' + user.phoneNumber,
+        to: '+1' + user.phoneNumber,
         code,
       })
       .then((verification_check) => {
         console.log(verification_check.status);
-        return res.status(200).json(verification_check.status);
+        return res.status(200).json(verification_check);
       })
       .catch((error) => {
         return res.status(400).json(error);

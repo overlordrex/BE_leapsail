@@ -90,7 +90,7 @@ const sendOTP = async (req, res, next) => {
   try {
     client.verify.v2
       .services('VA4dad51595399e49d2c0faf72be535488')
-      .verifications.create({ to: `+${user.phoneNumber}`, channel: 'sms' })
+      .verifications.create({ to: user.phoneNumber, channel: 'sms' })
       .then((verification) => {
         console.log(verification.status);
         return res.status(200).json(verification);

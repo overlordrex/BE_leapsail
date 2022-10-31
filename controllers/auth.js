@@ -7,7 +7,8 @@ const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
 const accountSid = 'ACce89c60ee42315c20e97d347bb5564f9';
-const authToken = 'ce31e10cb0f77a42c75677c0a788f059';
+const authToken = '98db90779cb47336b805807bebe79bb5';
+const serviceId = 'VA4dad51595399e49d2c0faf72be535488';
 
 const client = require('twilio')(accountSid, authToken);
 
@@ -87,21 +88,21 @@ const verifyEmail = async (req, res, next) => {
 const sendOTP = async (req, res, next) => {
   const user = await User.findById(req.params.id);
   if (!user) return next(handleError(404, 'User does not exist.'));
-  res.send('working');
-  // try {
-  //   client.verify.v2
-  //     .services('VA4dad51595399e49d2c0faf72be535488')
-  //     .verifications.create({ to: '+12058823683', channel: 'sms' })
-  //     .then((verification) => {
-  //       console.log(verification.status);
-  //       return res.status(200).json(verification);
-  //     })
-  //     .catch((error) => {
-  //       return res.status(400).json(error);
-  //     });
-  // } catch (error) {
-  //   next(error);
-  // }
+
+  try {
+    client.verify.v2
+      .services(serviceId)
+      .verifications.create({ to: user.phoneNumber, channel: 'sms' })
+      .then((verification) => {
+        console.log(verification.status);
+        return res.status(200).json(verification);
+      })
+      .catch((error) => {
+        return res.status(400).json(error);
+      });
+  } catch (error) {
+    next(error);
+  }
 };
 
 const verifyMobile = async (req, res, next) => {

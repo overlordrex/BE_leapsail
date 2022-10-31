@@ -78,7 +78,7 @@ const verifyEmail = async (req, res, next) => {
       user.emailToken = null;
 
       await user.save();
-      res.redirect('https://leapsail-web.netlify.app/login');
+      res.redirect(`https://leapsail-web.netlify.app/otp/${user._id}`);
     }
   } catch (error) {
     next(error);
